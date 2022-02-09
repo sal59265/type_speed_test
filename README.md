@@ -16,6 +16,10 @@ This project is a community app that
 
 ---
 
+### [Trello for this project](https://trello.com/b/7sza8xEx/typespeedtest)
+
+---
+
 ### **ERD**
 
 ![ERD](https://i.imgur.com/s30Wpws.png)
@@ -32,7 +36,7 @@ This project is a community app that
 
 - [] Leaderboard using Web socket
 - [] randomly generate script from API
-- []
+- [] graph for the chronological speed and indicate where the error was
 
 ---
 
