@@ -4,6 +4,7 @@
         <div class="stat">
           <div class="timer">Time: 0</div>
           <div> {{this.index}} </div>
+          <div> {{this.time}} </div>
           <div class="error"> Error: {{this.error}}</div>
         </div>
     <div class="quote">
@@ -20,7 +21,8 @@
     type="text"
     ></textarea>
     <div>{{this.text}}</div>
-    <button class="start" @click="startType()">start</button>
+    <button class="start" 
+    @click="startTimer()">start</button>
     <button class="restart">restart</button>
 <!-- if test is finished render result -->
     <div>result</div>
@@ -40,8 +42,6 @@ export default {
   data: () => ({
     quote: [],
     text:'',
-    quoteSpan: '',
-    timer: "",
     time: 60,
     error: 0,
     index: 0
@@ -55,12 +55,13 @@ export default {
       this.quote = res.data.content
       this.quote = this.quote.split('')
     },
-    startType() {
-      this.error = 0;
-      this.timer= "";
+    startTimer() {
+      setInterval(() => {this.time--},1000)
     },
     handleChange(e) {
-      console.log(e)
+      if (e.data === this.quote[0]) {
+        setInterval(() => {this.time--},1000)
+      }
       if (e.data === null) {
         this.index -= 1
       } else {
@@ -82,7 +83,6 @@ export default {
           this.$refs[`this${this.index}`][0].classList.remove("incorrect") 
           this.$refs[`this${this.index}`][0].classList.remove("correct")
       }
-      console.log(document.getElementsByClassName('error'))
     this.error = document.getElementsByClassName('error').length - 1
     }
   }
