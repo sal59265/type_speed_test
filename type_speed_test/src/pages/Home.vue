@@ -7,11 +7,13 @@
         </div>
     <div class="quote">
       <span v-for="(character,index) in quote"
-      :key="index">{{character? character: ' '}}</span>
+      :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
     </div>
     <textarea class="text"
     autofocus
-    v-model="text"
+    @input="handleChange"
+    value= this.text
+    :v-bind="text"
     placeholder="Type here"
     name="text"
     type="text"
@@ -36,7 +38,7 @@ export default {
   name: 'Home',
   data: () => ({
     quote: [],
-    text:[],
+    text:'',
     quoteSpan: '',
     timer: "",
     time: 60,
@@ -55,6 +57,22 @@ export default {
       this.error = 0;
       this.timer= "";
     },
+    handleChange(e) {
+      this.text = e.target.value
+      this.text = this.text.split('')
+      for (let i=0; i < this.text.length; i++) {
+        if (this.text[i] === null) {
+          this.$refs[`this${i}`][0].classList.remove("incorrect")
+        this.$refs[`this${i}`][0].classList.remove("correct")
+      } else if (this.text[i] !== this.quote[i]) {
+        this.$refs[`this${i}`][0].classList.add("incorrect")
+        this.$refs[`this${i}`][0].classList.remove("correct")
+      } else {
+        this.$refs[`this${i}`][0].classList.remove("incorrect")
+        this.$refs[`this${i}`][0].classList.add("correct")
+      }
+      }
+    }
   }
 }
 </script>
@@ -81,5 +99,14 @@ export default {
     border: none;
     margin: 10px;
     border-radius: 5px;
+  }
+
+  .correct {
+    color: green;
+  }
+
+  .incorrect {
+    color: red;
+    text-decoration: underline;
   }
 </style>
