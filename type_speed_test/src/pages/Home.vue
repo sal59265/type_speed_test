@@ -2,9 +2,9 @@
   <div>
       <div class="container">
         <div class="stat">
-          <div class="timer">Time: 0</div>
-          <div> {{this.index}} </div>
-          <div> {{this.time}} </div>
+          <div> index: {{this.index}} </div>
+          <div> time: {{this.time}} </div>
+          <div>text: {{this.text}}</div>
           <div class="error"> Error: {{this.error}}</div>
         </div>
     <div class="quote">
@@ -20,7 +20,6 @@
     name="text"
     type="text"
     ></textarea>
-    <div>{{this.text}}</div>
     <button class="start" 
     @click="startTimer()">start</button>
     <button class="restart">restart</button>
@@ -28,7 +27,7 @@
     <div>result</div>
     <div class="wrapper">
       <div>Accuracy: </div>
-      <div>WPM: </div>
+          <div>wpm: {{this.wpm}}</div>
     </div>
       </div>
   </div>
@@ -44,7 +43,9 @@ export default {
     text:'',
     time: 60,
     error: 0,
-    index: 0
+    index: 0,
+    start: false,
+    wpm: 0
   }),
   mounted() {
     this.getRandomQuote()
@@ -55,12 +56,10 @@ export default {
       this.quote = res.data.content
       this.quote = this.quote.split('')
     },
-    startTimer() {
-      setInterval(() => {this.time--},1000)
-    },
     handleChange(e) {
-      if (e.data === this.quote[0]) {
+      if (e.data === this.quote[0] && this.start === false) {
         setInterval(() => {this.time--},1000)
+        this.start = true
       }
       if (e.data === null) {
         this.index -= 1
@@ -84,6 +83,7 @@ export default {
           this.$refs[`this${this.index}`][0].classList.remove("correct")
       }
     this.error = document.getElementsByClassName('error').length - 1
+    this.wpm = Math.round(((document.getElementsByClassName('correct').length - this.error) /5) / (60 - (60 - this.time)) * 60)
     }
   }
 }
