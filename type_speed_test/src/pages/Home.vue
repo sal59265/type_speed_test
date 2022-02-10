@@ -1,16 +1,10 @@
 <template>
-  <div>
+  <div class="main">
       <div class="container">
-        <div class="stat">
-          <div> index: {{this.index}} </div>
-          <div> time: {{this.time}} </div>
-          <div>text: {{this.text}}</div>
-          <div class="error"> Error: {{this.error}}</div>
-        </div>
-    <div class="quote">
-      <span v-for="(character,index) in quote"
-      :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
-    </div>
+      <div class="quote">
+        <span v-for="(character,index) in quote"
+        :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
+      </div>
     <textarea class="text"
     autofocus
     ref="text"
@@ -21,12 +15,14 @@
     name="text"
     type="text"
     ></textarea>
-    <button class="restart" @click="restart()" >restart</button>
-<!-- if test is finished render result -->
-    <div>result</div>
     <div class="wrapper">
-      <div>Accuracy: {{this.accuracy}} </div>
-          <div>wpm: {{this.wpm}}</div>
+      <div class="stat">
+        <div> time left: {{this.time}} </div>
+        <div> Error: {{this.error}}</div>
+        <div>Accuracy: {{this.accuracy}} </div>
+        <div>wpm: {{this.wpm}}</div>
+    <button class="restart" @click="restart()" >restart</button>
+      </div>
     </div>
       </div>
   </div>
@@ -97,31 +93,44 @@ export default {
     this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
     },
     restart() {
-      for (let i = 0; i < this.index; i++) {
-        this.$refs[`this${i}`][0].classList.remove("correct")
-        this.$refs[`this${i}`][0].classList.remove("incorrect")
-        this.$refs[`this${i}`][0].classList.remove("error")
-        }
-      this.$refs["text"].value = ''
-      this.start = false
-      this.time = 30;
-      this.text = ''
-      this.wpm = 0
-      this.erorr = 0
-      this.getRandomQuote()
+      // for (let i = 0; i < this.index; i++) {
+      //   this.$refs[`this${i}`][0].classList.remove("correct")
+      //   this.$refs[`this${i}`][0].classList.remove("incorrect")
+      //   this.$refs[`this${i}`][0].classList.remove("error")
+      //   }
+      // this.$refs["text"].value = ''
+      // this.time = 30;
+      // this.erorr = 0
+      // this.text = ''
+      // this.index = 0
+      // this.start = false
+      // this.wpm = 0
+      // this.timer = null
+      // this.accuracy = 0
+      // this.typing = true
+      // this.getRandomQuote()
+      location.reload()
     }
   }
 }
 </script>
 <style>
-  .container {
-    width: 80vmin;
-    padding: 50px 30px;
-    background-color: black;
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: white;
   }
-  
-  .stat {
-    text-align: right;
+  .text {
+    /* opacity: 0; */
+  }
+
+  .container {
+    width: 770px;
+    padding: 35px;
+    border-radius: 10px;
+    /* background: brown; */
   }
   input {
     resize: none;
@@ -142,4 +151,6 @@ export default {
     color: red;
     text-decoration: underline;
   }
+
+
 </style>
