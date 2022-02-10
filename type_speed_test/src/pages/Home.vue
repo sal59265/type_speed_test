@@ -3,6 +3,7 @@
       <div class="container">
         <div class="stat">
           <div class="timer">Time: 0</div>
+          <div> {{this.index}} </div>
           <div class="error"> Error: {{this.error}}</div>
         </div>
     <div class="quote">
@@ -43,6 +44,7 @@ export default {
     timer: "",
     time: 60,
     error: 0,
+    index: 0
   }),
   mounted() {
     this.getRandomQuote()
@@ -58,27 +60,30 @@ export default {
       this.timer= "";
     },
     handleChange(e) {
+      console.log(e)
+      if (e.data === null) {
+        this.index -= 1
+      } else {
+        this.index += 1
+      }
       this.text = e.target.value
       this.text = this.text.split('')
       for (let i=0; i < this.text.length; i++) {
-        if (this.text[i] === this.text[i] + 1 ) {
-          this.$refs[`this${i}`][0].classList.remove("incorrect") 
-          this.$refs[`this${i}`][0].classList.remove("correct")
-          //not null, not the lengh of quote vs text, 
-          // if(this.$refs[`this${i}`][0].classList.contains("incorrect")) {
-          // this.$refs[`this${i}`][0].classList.remove("incorrect") 
-          // } else {
-          // this.$refs[`this${i}`][0].classList.remove("correct")
-          // }
-      } else if (this.text[i] !== this.quote[i]) {
+        if (this.text[i] !== this.quote[i]) {
         this.$refs[`this${i}`][0].classList.add("incorrect")
+        this.$refs[`this${i}`][0].classList.add("error")
         this.$refs[`this${i}`][0].classList.remove("correct")
       } else {
         this.$refs[`this${i}`][0].classList.remove("incorrect")
         this.$refs[`this${i}`][0].classList.add("correct")
       }
     }
-    this.error = document.getElementsByClassName('incorrect').length
+    if (e.data === null ) {
+          this.$refs[`this${this.index}`][0].classList.remove("incorrect") 
+          this.$refs[`this${this.index}`][0].classList.remove("correct")
+      }
+      console.log(document.getElementsByClassName('error'))
+    this.error = document.getElementsByClassName('error').length - 1
     }
   }
 }
@@ -93,25 +98,21 @@ export default {
   .stat {
     text-align: right;
   }
-
   input {
     resize: none;
     width: 100%;
     border-radius: 5px;
     
   }
-
   button {
     float: right;
     border: none;
     margin: 10px;
     border-radius: 5px;
   }
-
   .correct {
     color: green;
   }
-
   .incorrect {
     color: red;
     text-decoration: underline;
