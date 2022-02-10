@@ -13,6 +13,7 @@
     </div>
     <textarea class="text"
     autofocus
+    ref="text"
     @input="handleChange"
     value= this.text
     :v-bind="text"
@@ -20,13 +21,11 @@
     name="text"
     type="text"
     ></textarea>
-    <button class="start" 
-    @click="startTimer()">start</button>
-    <button class="restart">restart</button>
+    <button class="restart" @click="restart()" >restart</button>
 <!-- if test is finished render result -->
     <div>result</div>
     <div class="wrapper">
-      <div>Accuracy: </div>
+      <div>Accuracy: {{this.accuracy}} </div>
           <div>wpm: {{this.wpm}}</div>
     </div>
       </div>
@@ -35,17 +34,20 @@
 
 <script>
 import axios from 'axios'
-const QUOTE_API = 'http://api.quotable.io/random?minLength=100&maxLength=140'
+const QUOTE_API = 'http://api.quotable.io/random?minLength=200&maxLength=300'
 export default {
   name: 'Home',
   data: () => ({
     quote: [],
     text:'',
-    time: 60,
+    time: 30,
     error: 0,
     index: 0,
     start: false,
-    wpm: 0
+    wpm: 0,
+    timer: null,
+    accuracy: 0,
+    typing: true
   }),
   mounted() {
     this.getRandomQuote()
@@ -57,9 +59,15 @@ export default {
       this.quote = this.quote.split('')
     },
     handleChange(e) {
-      if (e.data === this.quote[0] && this.start === false) {
-        setInterval(() => {this.time--},1000)
+      if (e.data === this.quote[0] && this.start === false && this.typing === true) {
         this.start = true
+        this.timer = setInterval(() => {
+          this.time--
+          if (this.time === 0) {
+            clearInterval(this.timer)
+            this.typing = false
+          }
+          },1000)
       }
       if (e.data === null) {
         this.index -= 1
@@ -84,6 +92,23 @@ export default {
       }
     this.error = document.getElementsByClassName('error').length - 1
     this.wpm = Math.round(((document.getElementsByClassName('correct').length - this.error) /5) / (60 - (60 - this.time)) * 60)
+    this.wpm = this.wpm < 0 || !this.wpm || this.wpm === Infinity? 0 : this.wpm;
+    this.accuracy = Math.round((document.getElementsByClassName('correct').length - this.error/ (document.getElementsByClassName('correct').length)))
+    this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
+    },
+    restart() {
+      for (let i = 0; i < this.index; i++) {
+        this.$refs[`this${i}`][0].classList.remove("correct")
+        this.$refs[`this${i}`][0].classList.remove("incorrect")
+        this.$refs[`this${i}`][0].classList.remove("error")
+        }
+      this.$refs["text"].value = ''
+      this.start = false
+      this.time = 30;
+      this.text = ''
+      this.wpm = 0
+      this.erorr = 0
+      this.getRandomQuote()
     }
   }
 }
