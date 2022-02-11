@@ -123,7 +123,7 @@ export default {
     background: white;
   }
   .text {
-    opacity: 0;
+    /* opacity: 0; */
   }
 
   .container {
