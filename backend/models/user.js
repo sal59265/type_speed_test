@@ -1,6 +1,6 @@
 'use strict';
 const { Model, DataTypes } = require('sequelize');
-const { Sequelize, sequelize } = require('.');
+const { Sequelize } = require('.');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
@@ -9,13 +9,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'scripts',
         onDelete: 'cascade',
         onUpdate: 'cascade'
-      });
-      User.hasMany(models.LeaderBoard, {
-        foreignKey: 'userId',
-        as: 'leaderboards',
-        onDelete: 'cascade',
-        onUpdate: 'cascade'
-      });
+      }),
+        User.hasMany(models.LeaderBoard, {
+          foreignKey: 'userId',
+          as: 'leaderboards',
+          onDelete: 'cascade',
+          onUpdate: 'cascade'
+        });
     }
   }
   User.init(
