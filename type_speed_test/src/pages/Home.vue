@@ -91,6 +91,10 @@ export default {
     this.wpm = this.wpm < 0 || !this.wpm || this.wpm === Infinity? 0 : this.wpm;
     this.accuracy = Math.round((document.getElementsByClassName('correct').length - this.error/ (document.getElementsByClassName('correct').length)))
     this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
+    if (this.timer === 0) {
+      let text = document.querySelector('textarea');
+      text.setAttribute("disabled", "")
+    }
     },
     restart() {
       for (let i = 0; i < this.index; i++) {
