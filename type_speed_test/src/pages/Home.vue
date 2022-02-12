@@ -36,7 +36,7 @@ export default {
   data: () => ({
     quote: [],
     text:'',
-    time: 30,
+    time: 5,
     error: 0,
     index: 0,
     start: false,
@@ -91,9 +91,11 @@ export default {
     this.wpm = this.wpm < 0 || !this.wpm || this.wpm === Infinity? 0 : this.wpm;
     this.accuracy = Math.round((document.getElementsByClassName('correct').length - this.error/ (document.getElementsByClassName('correct').length)))
     this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
-    if (this.timer === 0) {
-      let text = document.querySelector('textarea');
-      text.setAttribute("disabled", "")
+    if (this.time === 0) {
+      let text = document.querySelector("textarea");
+      text.setAttribute("disabled", "");
+      alert("Time is up!")
+      // render stats and have an absolute position
     }
     },
     restart() {
@@ -114,6 +116,7 @@ export default {
       this.typing = true
       this.getRandomQuote()
       let text = document.querySelector("textarea");
+      console.log(text)
       text.focus()
     }
   }
