@@ -120,10 +120,10 @@ export default {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: white;
+    background: blue;
   }
   .text {
-    /* opacity: 0; */
+    opacity: 0;
   }
 
   .container {
