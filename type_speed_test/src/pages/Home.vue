@@ -93,23 +93,24 @@ export default {
     this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
     },
     restart() {
-      // for (let i = 0; i < this.index; i++) {
-      //   this.$refs[`this${i}`][0].classList.remove("correct")
-      //   this.$refs[`this${i}`][0].classList.remove("incorrect")
-      //   this.$refs[`this${i}`][0].classList.remove("error")
-      //   }
-      // this.$refs["text"].value = ''
-      // this.time = 30;
-      // this.erorr = 0
-      // this.text = ''
-      // this.index = 0
-      // this.start = false
-      // this.wpm = 0
-      // this.timer = null
-      // this.accuracy = 0
-      // this.typing = true
-      // this.getRandomQuote()
-      location.reload()
+      for (let i = 0; i < this.index; i++) {
+        this.$refs[`this${i}`][0].classList.remove("correct")
+        this.$refs[`this${i}`][0].classList.remove("incorrect")
+        this.$refs[`this${i}`][0].classList.remove("error")
+        }
+      this.$refs["text"].value = ''
+      this.time = 5;
+      this.erorr = 0
+      this.text = ''
+      this.index = 0
+      this.start = false
+      this.wpm = 0
+      this.timer = clearInterval(this.timer)
+      this.accuracy = 0
+      this.typing = true
+      this.getRandomQuote()
+      let text = document.querySelector("textarea");
+      text.focus()
     }
   }
 }
