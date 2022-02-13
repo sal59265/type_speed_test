@@ -1,20 +1,29 @@
 <template>
   <div class="main">
       <div class="container" v-if="form">
-      <div class="quote">
-        <span v-for="(character,index) in quote"
-        :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
-      </div>
-    <textarea class="text"
-    autofocus
-    ref="text"
-    @input="handleChange"
-    value= this.text
-    :v-bind="text"
-    placeholder="Type here"
-    name="text"
-    type="text"
-    ></textarea>
+        <div v-if="randomQuote">
+          <div class="quote">
+            <span v-for="(character,index) in quote"
+            :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
+          </div>
+        </div>
+        <div v-else>
+          <div class="quote">
+            <span v-for="(character,index) in dataQuote"
+            :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
+          </div>
+        </div>
+          <textarea class="text"
+          autofocus
+          ref="text"
+          @input="handleChange"
+          value= this.text
+          :v-bind="text"
+          placeholder="Type here"
+          name="text"
+          type="text"
+          ></textarea>
+    
     <div class="wrapper">
       <div class="stat">
         <div> time left: {{this.time}} </div>
@@ -23,12 +32,13 @@
         <div>wpm: {{this.wpm}}</div>
     <button class="restart" @click="restart()" >restart</button>
     <button class="dataQuote" @click="getDataQuote()" >Data</button>
+    <button class="getQuote" @click="getRandomQuote()">Quote</button>
       </div>
     </div>
       </div>
-    <div class="form" v-else>
-      <Form :form="form" :name="name" :password="password" @handleFormChange="handleFormChange" @handleSubmit="handleSubmit" />
-    </div>
+      <div class="form" v-else>
+        <Form :form="form" :name="name" :password="password" :email="email" @handleFormChange="handleFormChange" @handleSubmit="handleSubmit" />
+      </div>
   </div>
 </template>
 
@@ -52,39 +62,62 @@ export default {
     timer: null,
     accuracy: 0,
     typing: true,
-    form: true,
+    form: false,
     name: '',
     password: '',
-    dataQuote: ''
+    email: '',
+    dataQuote: '',
+    scriptId: '',
+    randomQuote: true
   }),
   mounted() {
     this.getRandomQuote()
   },
   methods: {
-    
     handleFormChange(name, value) {
       this[name] = value
     },
-
     handleSubmit() {
       this.createUser()
     },
     async createUser() {
       await axios.post('http://localhost:3001/users/', {
         name: this.name,
-        password: this.password
+        password: this.password,
+        email: this.email
       })
       window.location.reload()
     },
     async getDataQuote(){
-      const res = await axios.get('http://localhost:3001/scripts/')
-      this.dataQuote = res.data
-      console.log(this.dataQuote)
+      this.scriptId = Math.floor(Math.random() * 3 + 1)
+      const res = await axios.get(`http://localhost:3001/scripts/${this.scriptId}`)
+      this.dataQuote = res.data.script.codeScript
+      this.dataQuote = this.dataQuote.split('')
+      this.randomQuote = false
+      for (let i = 0; i < this.index; i++) {
+        this.$refs[`this${i}`][0].classList.remove("correct")
+        this.$refs[`this${i}`][0].classList.remove("incorrect")
+        this.$refs[`this${i}`][0].classList.remove("error")
+        }
+      this.$refs["text"].value = ''
+      this.time = 5;
+      this.erorr = 0
+      this.text = ''
+      this.index = 0
+      this.start = false
+      this.wpm = 0
+      this.timer = clearInterval(this.timer)
+      this.accuracy = 0
+      this.typing = true
+      let text = document.querySelector("textarea");
+      text.removeAttribute("disabled", "");
+      text.focus()
     },
 
     async getRandomQuote() {
       const res = await axios.get(QUOTE_API)
       this.quote = res.data.content
+      this.randomQuote = true
       this.quote = this.quote.split('')
     },
 
@@ -129,7 +162,6 @@ export default {
       let text = document.querySelector("textarea");
       text.setAttribute("disabled", "");
       alert("Time is up!")
-      // render stats and have an absolute position
     }
     },
     restart() {
@@ -150,7 +182,6 @@ export default {
       this.typing = true
       this.getRandomQuote()
       let text = document.querySelector("textarea");
-      console.log(text)
       text.focus()
     }
   }

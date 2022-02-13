@@ -15,6 +15,14 @@
       name="password"
       type="password"
       />
+      <input
+      @input="handleFormChange($event)"
+      placeholder="email"
+      :value="email"
+      name="email"
+      type="email"
+      />
+          </form>
       <button :disabled="!name || !password">Submit</button>
   </div>
 </template>
@@ -33,6 +41,7 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault()
+      console.log(this.name)
       this.$emit('handleSubmit')
     }
   }
