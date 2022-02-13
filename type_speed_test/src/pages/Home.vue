@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-      <div class="container">
+      <div class="container" v-if="form">
       <div class="quote">
         <span v-for="(character,index) in quote"
         :key="index" :ref="`this${index}`">{{character? character: ' '}}</span>
@@ -22,17 +22,25 @@
         <div>Accuracy: {{this.accuracy}} </div>
         <div>wpm: {{this.wpm}}</div>
     <button class="restart" @click="restart()" >restart</button>
+    <button class="dataQuote" @click="getDataQuote()" >Data</button>
       </div>
     </div>
       </div>
+    <div class="form" v-else>
+      <Form :form="form" :name="name" :password="password" @handleFormChange="handleFormChange" @handleSubmit="handleSubmit" />
+    </div>
   </div>
 </template>
 
 <script>
+import Form from '../components/Form'
 import axios from 'axios'
 const QUOTE_API = 'http://api.quotable.io/random?minLength=200&maxLength=300'
 export default {
   name: 'Home',
+  components: {
+    Form
+  },
   data: () => ({
     quote: [],
     text:'',
@@ -43,17 +51,43 @@ export default {
     wpm: 0,
     timer: null,
     accuracy: 0,
-    typing: true
+    typing: true,
+    form: true,
+    name: '',
+    password: '',
+    dataQuote: ''
   }),
   mounted() {
     this.getRandomQuote()
   },
   methods: {
+    
+    handleFormChange(name, value) {
+      this[name] = value
+    },
+
+    handleSubmit() {
+      this.createUser()
+    },
+    async createUser() {
+      await axios.post('http://localhost:3001/users/', {
+        name: this.name,
+        password: this.password
+      })
+      window.location.reload()
+    },
+    async getDataQuote(){
+      const res = await axios.get('http://localhost:3001/scripts/')
+      this.dataQuote = res.data
+      console.log(this.dataQuote)
+    },
+
     async getRandomQuote() {
       const res = await axios.get(QUOTE_API)
       this.quote = res.data.content
       this.quote = this.quote.split('')
     },
+
     handleChange(e) {
       if (e.data === this.quote[0] && this.start === false && this.typing === true) {
         this.start = true
