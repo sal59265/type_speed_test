@@ -53,7 +53,7 @@
       type="password"
       />
           </form>
-      <button @click="!this.form">Submit</button>
+      <button @click="togglePage()">Submit</button>
   </div>
       </div>
   </div>
@@ -62,7 +62,7 @@
 <script>
 const BASE_URL = "https://rapid-type-test.herokuapp.com"
 import axios from 'axios'
-const QUOTE_API = 'http://api.quotable.io/random?minLength=200&maxLength=300'
+const QUOTE_API = 'https://api.quotable.io/random?minLength=200&maxLength=300'
 export default {
   name: 'Home',
   data: () => ({
@@ -76,7 +76,7 @@ export default {
     timer: null,
     accuracy: 0,
     typing: true,
-    form: true,
+    form: false,
     name: '',
     password: '',
     email: '',
@@ -88,6 +88,9 @@ export default {
     this.getRandomQuote()
   },
   methods: {
+    togglePage() {
+      this.form = !this.form
+    },
     handleFormChange(name, value) {
       this[name] = value
     },
@@ -99,6 +102,7 @@ export default {
         name: this.name,
         password: this.password
       })
+        this.form = false
       window.location.reload()
     },
     async getDataQuote(){
@@ -171,8 +175,6 @@ export default {
     this.wpm = this.wpm < 0 || !this.wpm || this.wpm === Infinity? 0 : this.wpm;
     this.accuracy = Math.round(((document.getElementsByClassName('correct').length - this.error)/ (document.getElementsByClassName('correct').length)) * 100)
     this.accuracy = this.accuracy < 0 || !this.accuracy || this.accuracy === Infinity? 0: this.accuracy
-    console.log(document.getElementsByClassName('correct').length)
-    console.log(this.error)
     if (this.time === 0) {
       let text = document.querySelector("textarea");
       text.setAttribute("disabled", "");

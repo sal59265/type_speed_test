@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
   <div v-for="(user,index) in users"
   :key="index">
     <div>{{user.name}}</div>
@@ -28,3 +28,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .container {
+    display: flex;
+    align-items: center;
+    align-content: center;
+  }
+</style>
