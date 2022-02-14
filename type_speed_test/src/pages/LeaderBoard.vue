@@ -10,6 +10,7 @@
 </template>
 
 <script>
+const BASE_URL = "https://rapid-type-test.herokuapp.com"
 import axios from 'axios'
 export default {
   name: 'LeaderBoard',
@@ -21,7 +22,7 @@ export default {
   },
   methods: {
     async getUsers(){
-      const res = await axios.get('http://localhost:3001/users/')
+      const res = await axios.get(`${BASE_URL}/users/`)
       this.users = res.data.users
     }
   }
