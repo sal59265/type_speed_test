@@ -206,7 +206,7 @@ export default {
 </script>
 <style>
   span {
-    font-size: 20px;
+    font-size: 50px;
   }
   .main {
     display: flex;

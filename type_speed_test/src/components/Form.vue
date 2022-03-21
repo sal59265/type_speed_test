@@ -41,7 +41,6 @@ export default {
     },
     handleSubmit(e) {
       e.preventDefault()
-      console.log(this.name)
       this.$emit('handleSubmit')
     }
   }
