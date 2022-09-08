@@ -30,7 +30,6 @@
         <div>Accuracy: {{this.accuracy}} </div>
         <div>wpm: {{this.wpm}}</div>
     <button class="restart" @click="restart()" >restart</button>
-    <button class="dataQuote" @click="getDataQuote()" >Data</button>
     <button class="getQuote" @click="getRandomQuote()">Quote</button>
       </div>
     </div>
@@ -206,7 +205,7 @@ export default {
 </script>
 <style>
   span {
-    font-size: 50px;
+    font-size: 30px;
   }
   .main {
     display: flex;
@@ -234,9 +233,17 @@ export default {
   }
   button {
     float: right;
-    border: none;
     margin: 10px;
-    border-radius: 5px;
+    border-radius: 4px;
+    background: #005fff;
+    border: 1px solid #005fff;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    padding: 0.7rem 1.2rem;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease;
   }
   .correct {
     color: green;

@@ -47,3 +47,13 @@ export default {
 
 }
 </script>
+<style scoped>
+  input {
+    margin-bottom: 0.45rem;
+  color: rgb(61, 79, 88);
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 0.7px;
+  line-height: 1.3;
+  }
+</style>
